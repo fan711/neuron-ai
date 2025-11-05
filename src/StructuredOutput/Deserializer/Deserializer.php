@@ -205,6 +205,7 @@ class Deserializer
             'array' => $this->handleArray($value, $property),
             'DateTime' => $this->createDateTime($value),
             'DateTimeImmutable' => $this->createDateTimeImmutable($value),
+            'Carbon\Carbon' => $this->createCarbon($value),
             default => $this->handleSingleObject($value, $typeName)
         };
     }
@@ -318,6 +319,20 @@ class Deserializer
 
         // Deserialize into the correct class
         return $this->deserializeObject($data, $className);
+    }
+
+    /**
+     * Create a Carbon object from various input formats
+     *
+     * @throws DeserializerException
+     */
+    protected function createCarbon(mixed $value): \Carbon\Carbon
+    {
+        try {
+            return \Carbon\Carbon::parse($value);
+        } catch (\Exception) {
+            throw new DeserializerException("Cannot create Carbon from: {$value}");
+        }
     }
 
     /**
