@@ -248,9 +248,7 @@ abstract class AbstractChatHistory implements ChatHistoryInterface
      */
     protected function ensureValidAlternation(): void
     {
-        if ($this->history === []) {
-            return;
-        }
+	return;
 
         $result = [];
 
