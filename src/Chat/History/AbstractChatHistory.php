@@ -213,6 +213,8 @@ abstract class AbstractChatHistory implements ChatHistoryInterface
      */
     protected function ensureStartsWithUser(): void
     {
+        return;
+
         if ($this->history === []) {
             return;
         }
@@ -248,7 +250,7 @@ abstract class AbstractChatHistory implements ChatHistoryInterface
      */
     protected function ensureValidAlternation(): void
     {
-	return;
+        return;
 
         $result = [];
 
