@@ -27,6 +27,7 @@ use function enum_exists;
 use function explode;
 use function gettype;
 use function implode;
+use function in_array;
 use function is_array;
 use function is_numeric;
 use function is_string;
@@ -40,6 +41,7 @@ use function preg_match_all;
 use function preg_replace;
 use function str_replace;
 use function strtolower;
+use function trim;
 use function ucwords;
 
 use const JSON_ERROR_NONE;
@@ -201,7 +203,7 @@ class Deserializer
             'string' => (string) $value,
             'int' => (int) $value,
             'float' => (float) $value,
-            'bool' => (bool) $value,
+            'bool' => $this->castToBool($value),
             'array' => $this->handleArray($value, $property),
             'DateTime' => $this->createDateTime($value),
             'DateTimeImmutable' => $this->createDateTimeImmutable($value),
@@ -385,6 +387,15 @@ class Deserializer
         }
 
         throw new DeserializerException("Cannot create DateTimeImmutable from value type: ".gettype($value));
+    }
+
+    protected function castToBool(mixed $value): bool
+    {
+        if (is_string($value)) {
+            return !in_array(strtolower(trim($value)), ['false', 'no', 'nein', '0', ''], true);
+        }
+
+        return (bool) $value;
     }
 
     protected function handleEnum(BackedEnum|string $typeName, mixed $value): BackedEnum
